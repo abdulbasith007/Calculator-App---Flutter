@@ -31,7 +31,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Simple Calculator')),
+      appBar: AppBar(title: Text('Calculator App')),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -62,7 +62,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                 ...['7', '8', '9', '/', '*'].map(buildButton),
                 ...['4', '5', '6', '+', '-'].map(buildButton),
                 ...['1', '2', '3', 'C', '='].map(buildButton),
-                ...['0', '.', ''].map(buildButton),
+                ...['0', '.'].map(buildButton),
               ],
             ),
           ),
