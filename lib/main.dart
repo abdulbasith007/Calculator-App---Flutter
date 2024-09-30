@@ -20,11 +20,13 @@ class CalculatorHome extends StatefulWidget {
 
 class _CalculatorHomeState extends State<CalculatorHome> {
   String display = "";
+  double num1 = 0;
+  String operator = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Calculator App')),
+      appBar: AppBar(title: Text('Simple Calculator')),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -59,7 +61,15 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     return InkWell(
       onTap: () {
         setState(() {
-          display += label;
+          if (label == '=') {
+            performCalculation();
+          } else if (['+', '-', '*', '/'].contains(label)) {
+            num1 = double.parse(display);
+            operator = label;
+            display = "";
+          } else {
+            display += label;
+          }
         });
       },
       child: Container(
@@ -75,5 +85,27 @@ class _CalculatorHomeState extends State<CalculatorHome> {
         ),
       ),
     );
+  }
+
+  void performCalculation() {
+    double num2 = double.parse(display);
+    double result;
+    switch (operator) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case '*':
+        result = num1 * num2;
+        break;
+      case '/':
+        result = num1 / num2;
+        break;
+      default:
+        result = 0;
+    }
+    display = result.toString();
   }
 }
