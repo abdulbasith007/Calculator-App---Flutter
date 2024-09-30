@@ -1,6 +1,12 @@
 # calculator_app
 
 A new Flutter project.
+The APK of the app is present in the same directory.
+
+### Output Images:
+
+![](./output1.jpg)
+![](./output2.jpg)
 
 ## Getting Started
 
