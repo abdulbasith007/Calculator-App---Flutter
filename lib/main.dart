@@ -61,7 +61,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     return InkWell(
       onTap: () {
         setState(() {
-if (label == 'C') {
+          if (label == 'C') {
             clearCalculator();
           } else if (label == '=') {
             performCalculation();
