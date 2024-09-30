@@ -54,12 +54,13 @@ class _CalculatorHomeState extends State<CalculatorHome> {
           Expanded(
             flex: 3,
             child: GridView.count(
-              crossAxisCount: 4,
+              crossAxisCount: 5,
+              padding: EdgeInsets.all(8),
               children: [
-                ...['7', '8', '9', '/'].map(buildButton),
-                ...['4', '5', '6', '*'].map(buildButton),
-                ...['1', '2', '3', '-'].map(buildButton),
-                ...['C', '0', '.', '=', '+'].map(buildButton),
+                ...['7', '8', '9', '/', '*'].map(buildButton),
+                ...['4', '5', '6', '+', '-'].map(buildButton),
+                ...['1', '2', '3', 'C', '='].map(buildButton),
+                ...['0', '.', ''].map(buildButton), // Adjusted for layout balance
               ],
             ),
           ),
@@ -73,7 +74,6 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       onTap: () {
         setState(() {
           if (isError) {
-            // In order to reset if the last state was an error
             clearCalculator();
           }
 
@@ -97,7 +97,8 @@ class _CalculatorHomeState extends State<CalculatorHome> {
         });
       },
       child: Container(
-        margin: EdgeInsets.all(4),
+        margin: EdgeInsets.all(6),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.blueGrey[100],
           borderRadius: BorderRadius.circular(8),
