@@ -151,7 +151,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     }
 
     setState(() {
-      display = result.toString();
+      display = result.toStringAsFixed(2).replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), ""); // Added this for floating point issue
       hasDecimal = display.contains('.');
     });
   }
