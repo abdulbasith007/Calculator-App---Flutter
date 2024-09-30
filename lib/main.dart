@@ -48,7 +48,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                 ...['7', '8', '9', '/'].map(buildButton),
                 ...['4', '5', '6', '*'].map(buildButton),
                 ...['1', '2', '3', '-'].map(buildButton),
-                ...['0', '.', '=', '+'].map(buildButton),
+                ...['C', '0', '.', '=', '+'].map(buildButton),
               ],
             ),
           ),
@@ -61,7 +61,9 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     return InkWell(
       onTap: () {
         setState(() {
-          if (label == '=') {
+          if (label == 'C') {
+            clearCalculator();
+          } else if (label == '=') {
             performCalculation();
           } else if (['+', '-', '*', '/'].contains(label)) {
             num1 = double.parse(display);
@@ -85,6 +87,14 @@ class _CalculatorHomeState extends State<CalculatorHome> {
         ),
       ),
     );
+  }
+
+  void clearCalculator() {
+    setState(() {
+      display = "";
+      num1 = 0;
+      operator = "";
+    });
   }
 
   void performCalculation() {
