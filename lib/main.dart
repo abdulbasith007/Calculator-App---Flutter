@@ -9,6 +9,7 @@ class CalculatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: CalculatorHome(),
+      theme: ThemeData(primarySwatch: Colors.blue),
     );
   }
 }
@@ -23,6 +24,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   double num1 = 0;
   String operator = "";
   bool hasDecimal = false;
+  bool isError = false; // I added this to show append the numbers when ERROR gets shown
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,17 @@ class _CalculatorHomeState extends State<CalculatorHome> {
             child: Container(
               alignment: Alignment.centerRight,
               padding: EdgeInsets.all(20),
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey, width: 2),
+              ),
               child: Text(
-                display,
-                style: TextStyle(fontSize: 48),
+                display.isEmpty ? "0" : display,
+                style: TextStyle(fontSize: 48, color: Colors.black),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
@@ -62,6 +72,11 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     return InkWell(
       onTap: () {
         setState(() {
+          if (isError) {
+            // In order to reset if the last state was an error
+            clearCalculator();
+          }
+
           if (label == 'C') {
             clearCalculator();
           } else if (label == '=') {
@@ -70,10 +85,12 @@ class _CalculatorHomeState extends State<CalculatorHome> {
             display += label;
             hasDecimal = true;
           } else if (['+', '-', '*', '/'].contains(label)) {
-            num1 = double.parse(display);
-            operator = label;
-            display = "";
-            hasDecimal = false;
+            if (display.isNotEmpty && !isError) {
+              num1 = double.parse(display);
+              operator = label;
+              display = "";
+              hasDecimal = false;
+            }
           } else if (label != '.') {
             display += label;
           }
@@ -100,6 +117,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       num1 = 0;
       operator = "";
       hasDecimal = false;
+      isError = false;
     });
   }
 
@@ -108,7 +126,10 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     double result;
 
     if (operator == '/' && num2 == 0) {
-      display = "Error";
+      setState(() {
+        display = "Error";
+        isError = true;
+      });
       return;
     }
 
@@ -129,7 +150,9 @@ class _CalculatorHomeState extends State<CalculatorHome> {
         result = 0;
     }
 
-    display = result.toString();
-    hasDecimal = display.contains('.');
+    setState(() {
+      display = result.toString();
+      hasDecimal = display.contains('.');
+    });
   }
 }
