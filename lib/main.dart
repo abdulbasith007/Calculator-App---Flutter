@@ -24,7 +24,9 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   double num1 = 0;
   String operator = "";
   bool hasDecimal = false;
-  bool isError = false; // I added this to show append the numbers when ERROR gets shown
+  bool isError = false;
+
+  final List<String> operators = ['+', '-', '*', '/'];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                 ...['7', '8', '9', '/', '*'].map(buildButton),
                 ...['4', '5', '6', '+', '-'].map(buildButton),
                 ...['1', '2', '3', 'C', '='].map(buildButton),
-                ...['0', '.', ''].map(buildButton), // Adjusted for layout balance
+                ...['0', '.', ''].map(buildButton),
               ],
             ),
           ),
@@ -84,12 +86,15 @@ class _CalculatorHomeState extends State<CalculatorHome> {
           } else if (label == '.' && !hasDecimal) {
             display += label;
             hasDecimal = true;
-          } else if (['+', '-', '*', '/'].contains(label)) {
+          } else if (operators.contains(label)) {
             if (display.isNotEmpty && !isError) {
-              num1 = double.parse(display);
-              operator = label;
-              display = "";
-              hasDecimal = false;
+              // In order to prevent consecutive operators
+              if (!operators.contains(display[display.length - 1])) {
+                num1 = double.parse(display);
+                operator = label;
+                display += label;
+                hasDecimal = false;
+              }
             }
           } else if (label != '.') {
             display += label;
@@ -123,7 +128,16 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   }
 
   void performCalculation() {
-    double num2 = double.parse(display);
+    // In order to prevent calculation if operator is the last character
+    if (operators.contains(display[display.length - 1])) {
+      setState(() {
+        display = "Error";
+        isError = true;
+      });
+      return;
+    }
+
+    double num2 = double.parse(display.split(operator).last);
     double result;
 
     if (operator == '/' && num2 == 0) {
