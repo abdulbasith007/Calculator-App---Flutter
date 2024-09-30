@@ -22,6 +22,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   String display = "";
   double num1 = 0;
   String operator = "";
+  bool hasDecimal = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +66,15 @@ class _CalculatorHomeState extends State<CalculatorHome> {
             clearCalculator();
           } else if (label == '=') {
             performCalculation();
+          } else if (label == '.' && !hasDecimal) {
+            display += label;
+            hasDecimal = true;
           } else if (['+', '-', '*', '/'].contains(label)) {
             num1 = double.parse(display);
             operator = label;
             display = "";
-          } else {
+            hasDecimal = false;
+          } else if (label != '.') {
             display += label;
           }
         });
@@ -94,6 +99,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       display = "";
       num1 = 0;
       operator = "";
+      hasDecimal = false;
     });
   }
 
@@ -122,6 +128,8 @@ class _CalculatorHomeState extends State<CalculatorHome> {
       default:
         result = 0;
     }
+
     display = result.toString();
+    hasDecimal = display.contains('.');
   }
 }
